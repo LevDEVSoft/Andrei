@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 
-public class Spawnerscript : MonoBehaviour
+public class Spawnscript : MonoBehaviour
 {
     public int Totalspawnee;
     public float timeToSpawn;
     public GameObject spawnee;
     public GameObject[] SpawneeList;
-    private bool positionSet;
-
-
+    //private bool positionSet;
+    private bool PositionSet;
 
     private void Start()
     {
@@ -36,9 +35,15 @@ public class Spawnerscript : MonoBehaviour
 
     IEnumerator Changeposition()
     {
-        Transform cam = Camera.main.transform;
-        transform.position = cam.forward * 10;
-        return true;
+        yield return new WaitForSeconds(0.2f);
+        if (!PositionSet)
+        {
+            if (vuforiaBehaviour.instance.enabled)
+            {
+                SetPosition();
+            }
+        
+        }
     }
 
     private IEnumerator Spawnloop()
@@ -46,10 +51,10 @@ public class Spawnerscript : MonoBehaviour
         StartCoroutine(Changeposition());
         yield return new WaitForSeconds(0.2f);
         int i = 0;
-        while(i < Totalspawnee - 1)
+        while(i < (Totalspawnee - 1))
         {
             SpawneeList[i] = SpawnElement();
-            i++
+            i++;
                 yield return new WaitForSeconds(Random.Range(timeToSpawn, timeToSpawn * 3));
         }
     }

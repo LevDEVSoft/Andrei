@@ -3,28 +3,41 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movemnt : MonoBehaviour
 {
+    public int health;
     public float scalemax;
     public float scalemin;
     public float maxOrbitSpeed;
+    public float GrowingSpeed;
     float orbitSpeed;
+    private bool IsScaled = false;
+    private bool isAlive = true;
     public Transform orbitAnchor;
     Vector3 OrbitDirection;
-    Vector3 maxScale;
-    public float GrowingSpeed;
-    private bool IsScaled = false;
-    public int health;
-    private bool isAlive = true;
+    Vector3 maxScale;    
     public GameObject explosion;
 
 
-    void Start()
+
+
+    void CubeSettings()
     {
-        CubeSettings();
+        orbitAnchor = Camera.main.transfrom;
+        float x = Random.Range(-1f, 1f);
+        float z = Random.Range(-1f, 1f);
+        float y = Random.Range(-1f, 1f);
+        OrbitDirection = new Vector3(x, y, z);
+        orbitSpeed = Random.Range(0.5f, maxOrbitSpeed);
+        float scale = Random.Range(scalemin, scalemax);
+        transform.localScale = Vector3.zero;
+        maxScale = new Vector3(scale, scale, scale);
+        transform.localScale = Vector3.zero;
+
+
+
 
     }
-
     private void Update()
     {
         RotateCube();
@@ -34,23 +47,16 @@ public class Movement : MonoBehaviour
         }
 
     }
-
-
-    void CubeSettings()
+    void Start()
     {
-        float x = Random.Range(-1f, 1f);
-        float z = Random.Range(-1f, 1f);
-        float y = Random.Range(-1f, 1f);
-        OrbitDirection = new Vector3(x, y, z);
-        orbitSpeed = Random.Range(0.5f, maxOrbitSpeed);
-        float scale = Random.Range(scalemin, scalemax);
-        transform.localScale = Vector3.zero;
-        maxScale = new Vector3(scale, scale, scale);
-
-
-
+        CubeSettings();
 
     }
+
+    
+
+
+    
     void ScaleObject()
     {
         if (transform.localScale != maxScale)
@@ -83,7 +89,7 @@ public class Movement : MonoBehaviour
     {
         isAlive = false;
         Instantiate(explosion, transform.position, Quaternion.identity);
-        GetComponent<Renderer>().enabled = false;
+        //GetComponent<Renderer>().enabled = false;
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
 

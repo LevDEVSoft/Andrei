@@ -32,13 +32,13 @@ public class LaserScript : MonoBehaviour
         if (Physics.Raycast(rayorigin, cam.forward, out hit, Firerange)) 
         {
             LaserLine.SetPosition(1, hit.point);
-            Movement movement = hit.collider.GetComponent<Movement>();
-            if (movement != null)
+            Movement cubectrl = hit.collider.GetComponent<Movement>();
+            if (cubectrl != null)
             {
                 if (hit.rigidbody != null)
                 {
                     hit.rigidbody.AddForce(-hit.normal * HitForce);
-                    movement.Hit(LaserDamage);
+                    cubectrl.Hit(LaserDamage);
                 }
 
             }
@@ -52,7 +52,7 @@ public class LaserScript : MonoBehaviour
         }
         StartCoroutine("Laserfx");
     }
-    private void Update()
+     void FixedUpdate()
     {
         if(Input.GetButtonDown("fire1"))
         {
@@ -60,6 +60,15 @@ public class LaserScript : MonoBehaviour
         
         }
         
+    }
+
+    private IEnumerator Laserfx()
+    {
+        LaserLine.enabled = true;
+        yield return LaserDuration;
+        LaserLine.enabled = false;
+    
+    
     }
 }
 
